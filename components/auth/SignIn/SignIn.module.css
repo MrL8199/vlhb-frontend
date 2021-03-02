@@ -1,0 +1,66 @@
+.pageHeading {
+  font-size: 3rem;
+  text-transform: uppercase;
+}
+
+.authForm {
+  padding: 2rem 0;
+  margin: 0 auto;
+}
+
+.bottom {
+  margin-top: 2rem;
+}
+
+.error {
+  color: red;
+  font-size: 1.6rem;
+  padding: 0.2rem 0;
+}
+
+.button {
+  width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .authForm {
+    width: 100%;
+  }
+}
+
+.loginForm {
+  max-width: 300px;
+}
+.loginFormForgot {
+  float: right;
+  text-align: center;
+}
+.antColRtl .loginFormForgot {
+  float: left;
+}
+.loginFormButton {
+  font-size: 1.7rem;
+  width: 100%;
+  height: 50px;
+  border-radius: var(--border-radius);
+}
+
+.input {
+  font-size: 1.7rem;
+  height: 44px;
+}
+
+.prefixIcon {
+  color: var(--primary-color);
+}
+
+.link {
+  margin-top: 2rem;
+  color: var(--color-dark);
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+.linkText {
+  color: var(--color-primary);
+}
