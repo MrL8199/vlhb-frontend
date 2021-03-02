@@ -24,8 +24,7 @@ const Categories: React.FC = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const payload = { params: { page, limit: LIMIT } };
-        const results = await CategoryService.getCategories(payload);
+        const results = await CategoryService.getCategories();
         setCategories(results.categories);
         setTotal(results.total);
       } catch (error) {

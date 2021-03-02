@@ -29,7 +29,7 @@ const Header: React.FC = () => {
   const menu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1" icon={<UserOutlined />}>
-        <Link href="admin/profile">Trang cá nhân</Link>
+        <Link href="/profile">Trang cá nhân</Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<SettingOutlined />}>
         <Link href="/admin?selected_page=settings">Cài đặt</Link>

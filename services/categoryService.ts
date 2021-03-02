@@ -7,8 +7,8 @@ const getCategories = async (): Promise<CategoriesData> => {
     const { data } = await apiClient.get(`/category`);
 
     const categoriesData: CategoriesData = {
-      categories: data.data.items,
-      total: data.data.total,
+      categories: data.data,
+      total: data.data.length,
     };
 
     return categoriesData;
