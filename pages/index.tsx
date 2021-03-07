@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Spinner, Button, Heading, Container } from 'components/ui';
 import { MobileBottomMenu } from 'components/core';
-import { ProductListSkeleton, ProductList } from 'components/product';
-import { Categories } from 'components/category';
 import { useShop } from 'contexts';
 import { GetServerSideProps } from 'next';
 import { CategoryService } from 'services';
@@ -40,9 +38,7 @@ const Home: React.FC<Props> = ({ categories }) => {
     <>
       <Container className={styles.container}>
         <Heading>Shop Categories</Heading>
-        <Categories categories={categories} />
         <Heading>Product Overview</Heading>
-        {isLoading ? <ProductListSkeleton number={20} /> : <ProductList products={products} />}
         {isLoadingMore && (
           <div className={styles.loadingWrapper}>
             <Spinner color={colors.primary} size={30} />

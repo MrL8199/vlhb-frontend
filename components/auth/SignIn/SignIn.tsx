@@ -1,13 +1,12 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Alert } from 'antd';
-import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
-import { useAuth, useToast } from 'contexts';
+import { Alert, Row } from 'antd';
+import React, { Fragment, useState } from 'react';
+import { Form, Input, Button } from 'antd';
+import { useAuth } from 'contexts';
 import styles from './SignIn.module.css';
 import { Meta } from 'components/core';
 import { PageLoader } from 'components/ui';
 import 'antd/dist/antd.css';
-import Link from 'next/link';
+import config from 'utils/config';
 
 type LoginParamsType = {
   username: string;
@@ -31,8 +30,6 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC = () => {
   const { login } = useAuth();
-
-  const { setToast } = useToast();
 
   const [status, setStatus] = useState('');
 
@@ -60,66 +57,52 @@ const Login: React.FC = () => {
     <>
       <Meta title="Đăng nhập" />
       {submitting && <PageLoader />}
-      <div className={styles.main}>
-        <h1>Đăng nhập trang quản trị</h1>
-        <Form
-          initialValues={initialValues}
-          onFinish={(values) => {
-            handleSubmit(values as LoginParamsType);
-            return Promise.resolve();
-          }}
-        >
-          {status === 'error' && !submitting && <LoginMessage content={errMsg} />}
-          <Form.Item
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập tài khoản',
-              },
-            ]}
-          >
-            <Input
-              className={styles.input}
-              prefix={<UserOutlined className={styles.prefixIcon} />}
-              placeholder={'Tên tài khoản'}
-              allowClear={true}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập mật khẩu',
-              },
-            ]}
-          >
-            <Input.Password
-              className={styles.input}
-              prefix={<LockOutlined className={styles.prefixIcon} />}
-              placeholder={'Mật khẩu'}
-            ></Input.Password>
-          </Form.Item>
-          <div
-            style={{
-              marginBottom: 24,
+      {status === 'error' && !submitting && <LoginMessage content={errMsg} />}
+      <Fragment>
+        <div className={styles.form}>
+          <div className={styles.logo}>
+            <img alt="logo" src={'/images/logo.png'} />
+            <span>{config.siteName}</span>
+          </div>
+          <Form
+            initialValues={initialValues}
+            onFinish={(values) => {
+              handleSubmit(values as LoginParamsType);
+              return Promise.resolve();
             }}
           >
-            <Form.Item noStyle name="autoLogin">
-              <Checkbox>Tự động đăng nhập</Checkbox>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập tài khoản',
+                },
+              ]}
+              hasFeedback
+            >
+              <Input placeholder={`Username`} />
             </Form.Item>
-            <Link href="/forgot_password">
-              <a className={styles.loginFormForgot}>Quên mật khẩu?</a>
-            </Link>
-          </div>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className={styles.loginFormButton}>
-              Đăng nhập
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập mật khẩu',
+                },
+              ]}
+              hasFeedback
+            >
+              <Input type="password" placeholder={'password'} />
+            </Form.Item>
+            <Row>
+              <Button type="primary" htmlType="submit" loading={submitting}>
+                Đăng nhập
+              </Button>
+            </Row>
+          </Form>
+        </div>
+      </Fragment>
     </>
   );
 };

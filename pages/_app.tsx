@@ -4,7 +4,7 @@ import { StoreProvider } from 'contexts';
 import { parseCookies, destroyCookie } from 'nookies';
 import { checkProtectedRoutes } from 'utils/auth';
 import { AuthService } from 'services/authService';
-import AdminLayout from 'components/layouts/admin-layout';
+import AdminLayout from 'components/layouts';
 import { User } from 'types';
 import 'styles/global.css';
 
@@ -50,6 +50,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
     try {
       const { user } = await AuthService.getMe(token);
       currentUser = user;
+      if (currentUser.role !== 'admin') throw Error('Không có quyền');
     } catch (error) {
       destroyCookie(ctx, 'token');
       checkProtectedRoutes(ctx);

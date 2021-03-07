@@ -104,7 +104,7 @@ const AdminLayout: React.FC = ({ children }) => {
           </Sider>
         )}
         <Layout className={styles.siteLayout}>
-          <Header />
+          {currentUser && currentUser.role === 'admin' && <Header />}
           <Content style={{ margin: '0 16px' }}>{children}</Content>
           <Footer style={{ textAlign: 'center' }}>VLHB Store ©2021 bởi VLCODER</Footer>
         </Layout>

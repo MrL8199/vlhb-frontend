@@ -11,3 +11,5 @@ export { default as Toast } from './Toast/Toast';
 export { default as Button } from './Button';
 export { default as Container } from './Container';
 export { default as Heading } from './Heading';
+export { default as FilterItem } from './FilterItem';
+export { default as DropOption } from './DropOption';
