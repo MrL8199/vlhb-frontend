@@ -29,6 +29,7 @@
     "react-ga": "^2.7.0",
     "react-google-login": "^5.1.21",
     "react-icons": "^3.8.0",
+    "react-perfect-scrollbar": "^1.5.8",
     "react-slick": "^0.25.2",
     "slick-carousel": "^1.8.1",
     "yup": "^0.28.0"

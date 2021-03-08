@@ -2,7 +2,7 @@ import React from 'react';
 import App, { AppProps, AppContext } from 'next/app';
 import { StoreProvider } from 'contexts';
 import { parseCookies, destroyCookie } from 'nookies';
-import { checkProtectedRoutes } from 'utils/auth';
+import { redirectToLogin } from 'utils/auth';
 import { AuthService } from 'services/authService';
 import AdminLayout from 'components/layouts';
 import { User } from 'types';
@@ -36,24 +36,19 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   const { token } = parseCookies(appContext.ctx);
 
-  const isServer = appContext.ctx.req;
   const ctx = appContext.ctx;
-
-  if (!token) {
-    checkProtectedRoutes(ctx);
-    return { ...appProps };
-  }
-
   let currentUser: User | null = null;
 
-  if (isServer) {
+  if (!token) {
+    redirectToLogin(ctx);
+  } else {
     try {
       const { user } = await AuthService.getMe(token);
       currentUser = user;
       if (currentUser.role !== 'admin') throw Error('Không có quyền');
     } catch (error) {
       destroyCookie(ctx, 'token');
-      checkProtectedRoutes(ctx);
+      redirectToLogin(ctx);
     }
   }
 
