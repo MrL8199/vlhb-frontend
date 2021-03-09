@@ -1,6 +1,7 @@
 export type Category = {
   id: string;
   name: string;
+  create_date: number;
 };
 
 export interface AddCategory {

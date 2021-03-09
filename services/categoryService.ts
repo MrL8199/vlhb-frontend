@@ -5,6 +5,7 @@ import apiClient from 'utils/apiClient';
 const getCategories = async (): Promise<CategoriesData> => {
   try {
     const { data } = await apiClient.get(`/category`);
+    if (!data.status) throw new Error(data.message);
 
     const categoriesData: CategoriesData = {
       categories: data.data,
@@ -21,6 +22,20 @@ const addCategory = async (category: AddCategory): Promise<AddCategoryData> => {
   try {
     const url = '/category';
     const { data } = await apiClient.post(url, category);
+    if (!data.status) throw new Error(data.message);
+    return {
+      category: data.data,
+    };
+  } catch (error) {
+    throw new Error(catchError(error));
+  }
+};
+
+const updateCategory = async (category: Category): Promise<AddCategoryData> => {
+  try {
+    const url = `/category/${category.id}`;
+    const { data } = await apiClient.put(url, category);
+    if (!data.status) throw new Error(data.message);
     return {
       category: data.data,
     };
@@ -32,7 +47,9 @@ const addCategory = async (category: AddCategory): Promise<AddCategoryData> => {
 const deleteCategory = async (id: string): Promise<void> => {
   const url = `/category/${id}`;
   try {
-    return await apiClient.delete(url);
+    const { data } = await apiClient.delete(url);
+    if (!data.status) throw new Error(data.message);
+    return data.status;
   } catch (error) {
     throw new Error(catchError(error));
   }
@@ -42,10 +59,12 @@ const fetchCategory = async (id: string): Promise<Category> => {
   try {
     const url = `/category/${id}`;
     const { data } = await apiClient.get(url);
+    if (!data.status) throw new Error(data.message);
 
     const categoryData: Category = {
       id: data.data.id,
       name: data.data.name,
+      create_date: data.data.create_date,
     };
 
     return categoryData;
@@ -56,6 +75,7 @@ const fetchCategory = async (id: string): Promise<Category> => {
 
 export const CategoryService = {
   getCategories,
+  updateCategory,
   deleteCategory,
   addCategory,
   fetchCategory,
