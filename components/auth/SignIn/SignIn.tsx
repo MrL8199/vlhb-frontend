@@ -46,7 +46,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: LoginParamsType) => {
     try {
       setSubmitting(true);
-      await login(values.username, values.password, true);
+      await login(values.username, values.password, false);
     } catch (error) {
       setStatus('error');
       setErrMsg(error.message);

@@ -28,10 +28,9 @@ export const protectedRoutes = (pathname: string): boolean => {
   return false;
 };
 
-export const redirectToLogin = (ctx: NextPageContext): void => {
-  if (ctx.pathname === '/admin/login') return;
-
-  redirectUser(ctx, '/admin/login');
+export const checkProtectedRoutes = (ctx: NextPageContext): void => {
+  if (ctx.pathname === '/login') return;
+  redirectUser(ctx, '/login?ref=' + ctx.asPath);
 };
 
 export const setAuthToken = (token: string): void => {

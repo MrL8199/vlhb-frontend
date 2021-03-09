@@ -60,11 +60,7 @@ export const AuthProvider: React.FC<Props> = ({ children, currentUser }) => {
       }
     }
 
-    const url = adminRedirect
-      ? '/admin?selected_page=dashboard'
-      : ref
-      ? `/product?id=${ref}`
-      : '/profile';
+    const url = adminRedirect ? '/dashboard' : ref ? `${ref}` : '/dashboard';
 
     autoLogin(token, url);
   };

@@ -2,7 +2,7 @@ import React from 'react';
 import App, { AppProps, AppContext } from 'next/app';
 import { StoreProvider } from 'contexts';
 import { parseCookies, destroyCookie } from 'nookies';
-import { redirectToLogin } from 'utils/auth';
+import { checkProtectedRoutes, redirectUser } from 'utils/auth';
 import { AuthService } from 'services/authService';
 import AdminLayout from 'components/layouts';
 import { User } from 'types';
@@ -13,16 +13,6 @@ interface MyAppProps extends AppProps {
 }
 
 const MyApp = ({ Component, pageProps, currentUser, router }: MyAppProps): JSX.Element => {
-  if (router.pathname.startsWith('/admin')) {
-    return (
-      <StoreProvider currentUser={currentUser}>
-        <AdminLayout>
-          <Component {...pageProps} />
-        </AdminLayout>
-      </StoreProvider>
-    );
-  }
-
   return (
     <StoreProvider currentUser={currentUser}>
       <AdminLayout>
@@ -36,19 +26,26 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   const { token } = parseCookies(appContext.ctx);
 
+  const isServer = appContext.ctx.req;
   const ctx = appContext.ctx;
-  let currentUser: User | null = null;
 
   if (!token) {
-    redirectToLogin(ctx);
-  } else {
+    checkProtectedRoutes(ctx);
+    return { ...appProps };
+  }
+
+  let currentUser: User | null = null;
+
+  if (isServer) {
     try {
       const { user } = await AuthService.getMe(token);
       currentUser = user;
+      console.log(ctx.asPath)
       if (currentUser.role !== 'admin') throw Error('Không có quyền');
+      if (ctx.pathname === '/login') redirectUser(ctx, '/');
     } catch (error) {
       destroyCookie(ctx, 'token');
-      redirectToLogin(ctx);
+      checkProtectedRoutes(ctx);
     }
   }
 
