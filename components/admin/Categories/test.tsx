@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Category } from 'types';
 import { CategoryService } from 'services';
 import { ErrorMessage } from 'components/ui';
-import { FaTrash } from 'react-icons/fa';
 import 'antd/dist/antd.css';
-import { Table, Input, Popconfirm, Form, Typography, message, Spin } from 'antd';
+import { Table, Popconfirm, Typography, Spin } from 'antd';
 import { useToast } from 'contexts';
-import styles from './Category.module.css';
 
 const Categories: React.FC = () => {
   const { setToast } = useToast();
@@ -18,7 +16,7 @@ const Categories: React.FC = () => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState(categories);
   const [editingKey, setEditingKey] = useState('');
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(5);
 
   useEffect(() => {
     const fetchCategories = async () => {

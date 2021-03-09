@@ -2,9 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import { FilterItem } from 'components/ui';
 import { Button, Row, Col, DatePicker, Form, Input, Cascader } from 'antd';
+import { Publisher } from 'types';
 
 interface Props {
-  onAdd: void;
+  onAdd: (currentItem: Publisher) => void;
   filter: object;
   onFilterChange: (fields: any) => void;
 }
@@ -66,7 +67,7 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
     fields = handleFields(fields);
     onFilterChange(fields);
   };
-  const { name, address } = filter;
+  const { name } = filter;
 
   const initialCreateTime = [];
   if (filter.createTime && filter.createTime[0]) {
@@ -81,31 +82,23 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
       <Form
         ref={formRef}
         name="control-ref"
-        initialValues={{ name, address, createTime: initialCreateTime }}
+        initialValues={{ name, createTime: initialCreateTime }}
       >
         <Row gutter={24}>
           <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
             <Form.Item name="name">
-              <Search placeholder={`Search Name`} onSearch={handleSubmit} />
+              <Search placeholder={`Tên tìm kiếm`} onSearch={handleSubmit} />
             </Form.Item>
           </Col>
-          <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }} id="addressCascader">
-            <Form.Item name="address">
-              <Cascader
-                style={{ width: '100%' }}
-                // options={city}
-                placeholder={`Please pick an address`}
-              />
-            </Form.Item>
-          </Col>
+
           <Col
             {...ColProps}
-            xl={{ span: 6 }}
-            md={{ span: 8 }}
-            sm={{ span: 12 }}
+            xl={{ span: 10 }}
+            md={{ span: 12 }}
+            sm={{ span: 16 }}
             id="createTimeRangePicker"
           >
-            <FilterItem label={`CreateTime`}>
+            <FilterItem label={`Ngày tạo`}>
               <Form.Item name="createTime">
                 <RangePicker style={{ width: '100%' }} />
               </Form.Item>

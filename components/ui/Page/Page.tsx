@@ -1,8 +1,7 @@
-import React, { ReactChild } from 'react';
-
+import React, { CSSProperties, ReactChild } from 'react';
 import classnames from 'classnames';
-import Loader from '../Loader';
 import styles from './Page.module.css';
+import PageLoader from '../PageLoader';
 
 interface Props {
   className: string;
@@ -11,7 +10,7 @@ interface Props {
   inner: boolean;
 }
 const Page: React.FC<Props> = ({ className, children, loading = false, inner = false }) => {
-  const loadingStyle = {
+  const loadingStyle: CSSProperties = {
     height: 'calc(100vh - 184px)',
     overflow: 'hidden',
   };
@@ -22,7 +21,7 @@ const Page: React.FC<Props> = ({ className, children, loading = false, inner = f
       })}
       style={loading ? loadingStyle : null}
     >
-      {loading ? <Loader spinning /> : ''}
+      {loading ? <PageLoader /> : ''}
       {children}
     </div>
   );

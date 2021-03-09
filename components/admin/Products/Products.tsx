@@ -6,7 +6,6 @@ import { FaTrash } from 'react-icons/fa';
 import { formatPrice } from 'utils/helpers';
 import { useToast } from 'contexts';
 import styles from './Products.module.css';
-import AddProduct from '../AddProduct';
 
 const LIMIT = 10;
 
@@ -81,9 +80,11 @@ const Products: React.FC = () => {
 
   return (
     <div className="table-container">
-      <Modal visible={isOpenAddProductModal} title="Add Product" onClose={closeAddProductModal}>
-        <AddProduct onSubmit={handleAddProduct} />
-      </Modal>
+      <Modal
+        visible={isOpenAddProductModal}
+        title="Add Product"
+        onClose={closeAddProductModal}
+      ></Modal>
       <div className={styles.addProductContainer}>
         <Button title="Thêm" onClick={openAddProductModal} />
       </div>

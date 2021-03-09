@@ -1,10 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { CSSProperties } from 'react';
 import { BarsOutlined, DownOutlined } from '@ant-design/icons';
-import { Dropdown, Button, Menu } from 'antd';
+import { Dropdown, Button, Menu, DropDownProps } from 'antd';
 
-const DropOption = ({ onMenuClick, menuOptions = [], buttonStyle, dropdownProps }) => {
-  const menu = menuOptions.map((item) => <Menu.Item key={item.key}>{item.name}</Menu.Item>);
+const DropOption: React.FC<Props> = ({
+  onMenuClick,
+  menuOptions = [],
+  buttonStyle,
+  dropdownProps,
+}) => {
+  const menu = menuOptions.map((item: { key: string; name: string }) => (
+    <Menu.Item key={item.key}>{item.name}</Menu.Item>
+  ));
   return (
     <Dropdown overlay={<Menu onClick={onMenuClick}>{menu}</Menu>} {...dropdownProps}>
       <Button style={{ border: 'none', ...buttonStyle }}>
@@ -15,11 +21,18 @@ const DropOption = ({ onMenuClick, menuOptions = [], buttonStyle, dropdownProps 
   );
 };
 
-DropOption.propTypes = {
-  onMenuClick: PropTypes.func,
-  menuOptions: PropTypes.array.isRequired,
-  buttonStyle: PropTypes.object,
-  dropdownProps: PropTypes.object,
-};
+interface MenuInfo {
+  key: React.Key;
+  keyPath: React.Key[];
+  item: React.ReactInstance;
+  domEvent: React.MouseEvent<HTMLElement>;
+}
+
+interface Props {
+  onMenuClick(e: MenuInfo): void;
+  menuOptions: { key: string; name: string }[];
+  buttonStyle: CSSProperties;
+  dropdownProps: DropDownProps;
+}
 
 export default DropOption;

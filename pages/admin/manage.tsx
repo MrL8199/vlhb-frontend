@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Categories, Products } from 'components/admin';
 import { useAuth } from 'contexts';
 import { Alert } from 'components/ui';
+import Publisher from 'components/admin/Publisher';
 
 const Manage: React.FC = () => {
   const { currentUser } = useAuth();
@@ -16,9 +17,9 @@ const Manage: React.FC = () => {
       case 'categories':
         return <Categories />;
       case 'author':
-        return <Products />;
+        return <Publisher />;
       case 'publisher':
-        return <Products />;
+        return <Publisher />;
       default:
         return null;
     }

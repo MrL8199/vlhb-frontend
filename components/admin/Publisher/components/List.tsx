@@ -4,6 +4,7 @@ import { DropOption } from 'components/ui';
 import Link from 'next/link';
 import styles from './List.module.css';
 import { Publisher } from 'types';
+import { ColumnsType } from 'antd/lib/table';
 
 const { confirm } = Modal;
 
@@ -27,60 +28,30 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
     }
   };
 
-  const columns = [
+  const columns: ColumnsType<Publisher> = [
     {
-      title: 'Avatar',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 72,
-      fixed: 'left',
-      render: (text: string) => <Avatar style={{ marginLeft: 8 }} src={text} />,
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
-      title: 'Name',
+      title: 'Tên NXB',
       dataIndex: 'name',
       key: 'name',
-      render: (text: string, record: Publisher) => <Link href={`user/${record.id}`}>{text}</Link>,
     },
     {
-      title: 'NickName',
-      dataIndex: 'nickName',
-      key: 'nickName',
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Gender',
-      dataIndex: 'isMale',
-      key: 'isMale',
-      render: (text: string) => <span>{text ? 'Male' : 'Female'}</span>,
-    },
-    {
-      title: 'Phone',
-      dataIndex: 'phone',
-      key: 'phone',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'CreateTime',
-      dataIndex: 'createTime',
-      key: 'createTime',
+      title: 'Ngày tạo',
+      dataIndex: 'create_time',
+      key: 'create_time',
+      // sorter: {
+      //   compare: (a, b) => a.create_time - b.create_time,
+      //   multiple: 3,
+      // },
     },
     {
       title: 'Hoạt động',
       key: 'operation',
+      width: 120,
       fixed: 'right',
       render: (text: any, record: any) => {
         return (
