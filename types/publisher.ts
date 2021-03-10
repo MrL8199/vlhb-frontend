@@ -1,6 +1,7 @@
 export type Publisher = {
   id: string;
   name: string;
+  created_at: number;
 };
 
 export interface AddPublisher {
