@@ -7,12 +7,15 @@ import { AuthService } from 'services/authService';
 import AdminLayout from 'components/layouts';
 import { User } from 'types';
 import 'styles/global.css';
+import moment from 'moment';
+
+moment.locale('vi');
 
 interface MyAppProps extends AppProps {
   currentUser: User | null;
 }
 
-const MyApp = ({ Component, pageProps, currentUser, router }: MyAppProps): JSX.Element => {
+const MyApp = ({ Component, pageProps, currentUser }: MyAppProps): JSX.Element => {
   return (
     <StoreProvider currentUser={currentUser}>
       <AdminLayout>
