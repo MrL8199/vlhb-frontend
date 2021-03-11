@@ -10,6 +10,7 @@ const UserDetail: React.FC = () => {
   const { id } = router.query;
   const [loading, setLoading] = useState(true);
   const [orderDetail, setOrderDetail] = useState<Order>();
+  
 
   useEffect(() => {
     const fetchData = async () => {
