@@ -66,39 +66,39 @@ const AdminLayout: React.FC = ({ children }) => {
             >
               <SubMenu key="sub1" icon={<DashboardOutlined />} title="Bảng điều khiển">
                 <Menu.Item key="1">
-                  <Link href="admin/dashboard/statistical">Thống kê</Link>
+                  <Link href="/dashboard">Thống kê</Link>
                 </Menu.Item>
                 <Menu.Item key="2">
-                  <Link href="admin/dashboard/monitor">Theo dõi</Link>
+                  <Link href="/monitor">Theo dõi</Link>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" icon={<LaptopOutlined />} title="Quản lý Nhập/Xuất">
                 <Menu.Item key="3">
-                  <Link href="/admin/manage?selected_page=products">Quản lý sản phẩm</Link>
+                  <Link href="/product">Quản lý sản phẩm</Link>
                 </Menu.Item>
                 <Menu.Item key="4">
-                  <Link href="/admin/manage?selected_page=categories">Quản lý thể loại</Link>
+                  <Link href="/category">Quản lý thể loại</Link>
                 </Menu.Item>
                 <Menu.Item key="5">
-                  <Link href="/admin/manage?selected_page=author">Quản lý tác giả</Link>
+                  <Link href="/author">Quản lý tác giả</Link>
                 </Menu.Item>
                 <Menu.Item key="6">
-                  <Link href="/admin/manage?selected_page=publisher">Quản lý nhà xuất bản</Link>
+                  <Link href="/publisher">Quản lý nhà xuất bản</Link>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub3" icon={<UserOutlined />} title="Quản lý Tài khoản">
                 <Menu.Item key="7">
-                  <Link href="/admin/manage?selected_page=manager">Quản lý tài khoản quản lý</Link>
+                  <Link href="/manager">Quản lý tài khoản quản lý</Link>
                 </Menu.Item>
                 <Menu.Item key="8">
-                  <Link href="/admin/manage?selected_page=user">Danh sách khách hàng</Link>
+                  <Link href="/user">Danh sách khách hàng</Link>
                 </Menu.Item>
               </SubMenu>
               <Menu.Item key="9" icon={<ShoppingCartOutlined />}>
-                <Link href="admin/order">Quản lý Đơn hàng</Link>
+                <Link href="/order">Quản lý Đơn hàng</Link>
               </Menu.Item>
               <Menu.Item key="10" icon={<QrcodeOutlined />}>
-                <Link href="admin/coupon">Quản lý Khuyến mại</Link>
+                <Link href="/coupon">Quản lý Khuyến mại</Link>
               </Menu.Item>
             </Menu>
           </Sider>

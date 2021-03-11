@@ -22,8 +22,6 @@ interface Props extends ModalProps {
 const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
   const formRef = React.createRef();
 
-  console.log(modalProps.type);
-
   const handleOk = () => {
     formRef.current
       .validateFields()

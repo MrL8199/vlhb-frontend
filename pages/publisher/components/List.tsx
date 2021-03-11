@@ -49,7 +49,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       },
     },
     {
-      title: 'Hoạt động',
+      title: 'Hành động',
       key: 'operation',
       width: 120,
       fixed: 'right',
