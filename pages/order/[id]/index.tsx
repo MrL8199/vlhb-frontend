@@ -18,7 +18,7 @@ const UserDetail: React.FC<Props> = ({ order, error }) => {
   const router = useRouter();
 
   return (
-    <Page inner>
+    <Page inner loading className={'main'}>
       {error != null && message.error(error)}
       <Space direction="vertical">
         <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()}>

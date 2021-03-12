@@ -18,7 +18,7 @@ const Publishers: React.FC<Props> = ({ publishers }) => {
   const { query } = router;
 
   const [list, setList] = useState<Publisher[]>(publishers);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setpagination] = useState({ current: 1, pageSize: 10, total: list.length });
   const [modalType, setmodalType] = useState<string>('create');
@@ -41,7 +41,7 @@ const Publishers: React.FC<Props> = ({ publishers }) => {
     try {
       setLoading(true);
       selectedRowKeys.forEach(async (key) => {
-        await PublisherService.deletePublisher(key);
+        await PublisherService.deletePublisher(key.toString());
       });
       const results = await PublisherService.getPublishers();
       setList(results.publishers);
@@ -60,7 +60,7 @@ const Publishers: React.FC<Props> = ({ publishers }) => {
   };
 
   return (
-    <Page inner loading={loading}>
+    <Page inner loading={loading} className={'main'}>
       <Filter
         filter={{
           ...query,
@@ -127,7 +127,7 @@ const Publishers: React.FC<Props> = ({ publishers }) => {
         }}
       />
       <Modal
-        item={modalType === 'create' ? {} : currentItem}
+        item={modalType === 'create' ? undefined : currentItem}
         type={modalType}
         visible={modalVisible}
         destroyOnClose={true}

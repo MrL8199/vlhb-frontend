@@ -1,7 +1,6 @@
-import React from 'react';
-import { Table, Modal, Avatar, TableProps } from 'antd';
+import React, { ReactInstance } from 'react';
+import { Table, Modal, TableProps } from 'antd';
 import { DropOption } from 'components/ui';
-import Link from 'next/link';
 import styles from './List.module.css';
 import { Publisher } from 'types';
 import { ColumnsType } from 'antd/lib/table';
@@ -14,7 +13,7 @@ interface Props extends TableProps<Publisher> {
 }
 
 const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
-  const handleMenuClick = (record: Publisher, e: { key: string; name: string }) => {
+  const handleMenuClick = (record: Publisher, e: { key: React.Key; item: ReactInstance }) => {
     if (e.key === '1') {
       onEditItem(record);
     } else if (e.key === '2') {
@@ -78,7 +77,6 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       bordered
       scroll={{ x: 1200 }}
       columns={columns}
-      simple
       rowKey={(record) => record.id}
     />
   );

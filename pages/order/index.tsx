@@ -13,7 +13,7 @@ const Orders: React.FC = () => {
   const { query } = router;
 
   const [list, setList] = useState<Order[]>([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setpagination] = useState({ current: 1, pageSize: 10, total: list.length });
   const [modalType, setmodalType] = useState<string>('create');
@@ -23,7 +23,7 @@ const Orders: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const results = await OrderService.getOrders();
+      const results = await OrderService.getOrders('?');
       setList(results.items);
     } catch (error) {
       message.error(error.message);
@@ -40,9 +40,9 @@ const Orders: React.FC = () => {
     try {
       setLoading(true);
       selectedRowKeys.forEach(async (key) => {
-        await OrderService.deleteOrder(key);
+        await OrderService.deleteOrder(key.toString());
       });
-      const results = await OrderService.getOrders();
+      const results = await OrderService.getOrders('?');
       setList(results.items);
     } catch (error) {
       message.error(error.message);
@@ -59,7 +59,7 @@ const Orders: React.FC = () => {
   };
 
   return (
-    <Page inner loading={loading}>
+    <Page inner loading={loading} className={'main'}>
       <Filter
         filter={{
           ...query,
@@ -126,7 +126,7 @@ const Orders: React.FC = () => {
         }}
       />
       <Modal
-        item={modalType === 'create' ? {} : currentItem}
+        item={modalType === 'create' ? undefined : currentItem}
         visible={modalVisible}
         type={modalType}
         destroyOnClose={true}

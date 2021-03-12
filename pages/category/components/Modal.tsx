@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Modal, ModalProps } from 'antd';
+import { Form, FormInstance, Input, Modal, ModalProps } from 'antd';
 import { Category } from 'types';
 
 const FormItem = Form.Item;
@@ -15,20 +15,19 @@ const formItemLayout = {
 
 interface Props extends ModalProps {
   type: string;
-  item: Category;
+  item: Category | undefined;
   onOk: (...args: any[]) => any;
 }
 
 const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
-  const formRef = React.createRef();
+  const formRef = React.useRef<FormInstance>(null);
 
   const handleOk = () => {
     formRef.current
-      .validateFields()
+      ?.validateFields()
       .then((values) => {
         const data = {
           ...values,
-          key: item.key,
         };
         onOk(data);
       })
