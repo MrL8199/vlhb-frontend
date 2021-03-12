@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, message, Modal, ModalProps, Upload } from 'antd';
+import { Form, FormInstance, Input, message, Modal, ModalProps, Upload } from 'antd';
 import { Author } from 'types';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -16,7 +16,7 @@ const formItemLayout = {
 
 interface Props extends ModalProps {
   type: string;
-  item: Author;
+  item: Author | undefined;
   onOk: (...args: any[]) => any;
 }
 
@@ -24,13 +24,13 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
 
-  const getBase64 = (img, callback) => {
+  const getBase64 = (img: any, callback: any) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
   };
 
-  const beforeUpload = (file) => {
+  const beforeUpload = (file: File) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('Bạn chỉ có thể tải lên tệp JPG/PNG !');
@@ -42,7 +42,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
     return isJpgOrPng && isLt2M;
   };
 
-  const handleChange = (info) => {
+  const handleChange = (info: any) => {
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
@@ -56,19 +56,19 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
     }
   };
 
-  const formRef = React.createRef();
+  const formRef = React.useRef<FormInstance>(null);
 
   const handleOk = () => {
     formRef.current
-      .validateFields()
+      ?.validateFields()
       .then((values) => {
         const data = {
           ...values,
-          key: item.key,
+          key: item.id,
         };
         onOk(data);
       })
-      .catch((errorInfo) => {
+      .catch((errorInfo: any) => {
         console.log(errorInfo);
       });
   };

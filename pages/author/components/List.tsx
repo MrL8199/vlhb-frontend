@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactInstance } from 'react';
 import { Table, Modal, TableProps, Image } from 'antd';
 import { DropOption } from 'components/ui';
 import styles from './List.module.css';
@@ -15,7 +15,7 @@ interface Props extends TableProps<Author> {
 }
 
 const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
-  const handleMenuClick = (record: Author, e: { key: string; name: string }) => {
+  const handleMenuClick = (record: Author, e: { key: React.Key; item: ReactInstance }) => {
     if (e.key === '1') {
       onEditItem(record);
     } else if (e.key === '2') {
@@ -34,6 +34,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
+      width: 88,
       render: (text, record) => <Link href={`author/${record.id}`}>{'#' + text.substr(0, 4)}</Link>,
     },
     {
@@ -106,7 +107,6 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       bordered
       scroll={{ x: 1200 }}
       columns={columns}
-      simple
       rowKey={(record) => record.id}
     />
   );

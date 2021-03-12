@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styles from './FilterItem.module.css';
 
 const FilterItem: React.FC<Props> = ({ label = '', children }) => {
@@ -21,7 +21,7 @@ const FilterItem: React.FC<Props> = ({ label = '', children }) => {
 
 interface Props {
   label: string;
-  children: Element;
+  children: ReactNode;
 }
 
 export default FilterItem;

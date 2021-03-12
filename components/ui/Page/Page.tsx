@@ -1,11 +1,11 @@
-import React, { CSSProperties, ReactChild } from 'react';
+import React, { CSSProperties } from 'react';
 import classnames from 'classnames';
 import styles from './Page.module.css';
 import PageLoader from '../PageLoader';
 
 interface Props {
   className: string;
-  children: ReactChild;
+  children: React.ReactNode;
   loading: boolean;
   inner: boolean;
 }

@@ -18,7 +18,7 @@ const Authors: React.FC<Props> = ({ authors }) => {
   const { query } = router;
 
   const [list, setList] = useState<Author[]>(authors);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setpagination] = useState({ current: 1, pageSize: 10, total: list.length });
   const [modalType, setmodalType] = useState<string>('create');
@@ -41,7 +41,7 @@ const Authors: React.FC<Props> = ({ authors }) => {
     try {
       setLoading(true);
       selectedRowKeys.forEach(async (key) => {
-        await AuthorService.deleteAuthor(key);
+        await AuthorService.deleteAuthor(key.toString());
       });
       const results = await AuthorService.getAuthors();
       setList(results.authors);
@@ -60,7 +60,7 @@ const Authors: React.FC<Props> = ({ authors }) => {
   };
 
   return (
-    <Page inner loading={loading}>
+    <Page inner loading={loading} className={'main'}>
       <Filter
         filter={{
           ...query,
@@ -127,7 +127,7 @@ const Authors: React.FC<Props> = ({ authors }) => {
         }}
       />
       <Modal
-        item={modalType === 'create' ? {} : currentItem}
+        item={modalType === 'create' ? undefined : currentItem}
         type={modalType}
         visible={modalVisible}
         destroyOnClose={true}
