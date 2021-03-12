@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from 'contexts';
 import styles from './Header.module.css';
-import { Dropdown, Menu, message } from 'antd';
+import { Dropdown, Menu } from 'antd';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 import {
@@ -22,12 +22,8 @@ const Header: React.FC = () => {
     logout('/admin/login');
   };
 
-  function handleMenuClick(e) {
-    message.info('Click on menu item.');
-  }
-
   const menu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu>
       <Menu.Item key="1" icon={<UserOutlined />}>
         <Link href="/profile">Trang cá nhân</Link>
       </Menu.Item>

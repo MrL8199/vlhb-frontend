@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './FilterItem.module.css';
 
-const FilterItem = ({ label = '', children }) => {
+const FilterItem: React.FC<Props> = ({ label = '', children }) => {
   const labelArray = label.split('');
   return (
     <div className={styles.filterItem}>
@@ -20,9 +19,9 @@ const FilterItem = ({ label = '', children }) => {
   );
 };
 
-FilterItem.propTypes = {
-  label: PropTypes.string,
-  children: PropTypes.element.isRequired,
-};
+interface Props {
+  label: string;
+  children: Element;
+}
 
 export default FilterItem;

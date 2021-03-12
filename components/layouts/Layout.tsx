@@ -50,7 +50,13 @@ const AdminLayout: React.FC = ({ children }) => {
       </Head>
       <Layout style={{ minHeight: '100vh' }}>
         {currentUser && currentUser.role === 'admin' && (
-          <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} collapsedWidth={48}>
+          <Sider
+            collapsible
+            collapsed={collapsed}
+            onCollapse={onCollapse}
+            collapsedWidth={48}
+            width={256}
+          >
             <div className={collapsed ? styles.logoCollapse : styles.logo}>
               <a className={styles.siderLogo}>
                 <img src="/images/logo1.png" alt="logo" />

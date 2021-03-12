@@ -2,17 +2,12 @@ import React, { CSSProperties } from 'react';
 import { BarsOutlined, DownOutlined } from '@ant-design/icons';
 import { Dropdown, Button, Menu, DropDownProps } from 'antd';
 
-const DropOption: React.FC<Props> = ({
-  onMenuClick,
-  menuOptions = [],
-  buttonStyle,
-  dropdownProps,
-}) => {
+const DropOption: React.FC<Props> = ({ onMenuClick, menuOptions = [], buttonStyle }) => {
   const menu = menuOptions.map((item: { key: string; name: string }) => (
     <Menu.Item key={item.key}>{item.name}</Menu.Item>
   ));
   return (
-    <Dropdown overlay={<Menu onClick={onMenuClick}>{menu}</Menu>} {...dropdownProps}>
+    <Dropdown overlay={<Menu onClick={onMenuClick}>{menu}</Menu>}>
       <Button style={{ border: 'none', ...buttonStyle }}>
         <BarsOutlined style={{ marginRight: 2 }} />
         <DownOutlined />

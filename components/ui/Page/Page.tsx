@@ -19,7 +19,7 @@ const Page: React.FC<Props> = ({ className, children, loading = false, inner = f
       className={classnames(className, {
         [styles.contentInner]: inner,
       })}
-      style={loading ? loadingStyle : null}
+      style={loading ? loadingStyle : undefined}
     >
       {loading ? <PageLoader /> : ''}
       {children}
