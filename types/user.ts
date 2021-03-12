@@ -1,12 +1,27 @@
 export type User = {
-  _id: string;
-  avatar: string;
+  id: string;
+  avatar_url: string;
   username: string;
   phone?: string;
   email?: string;
   nickname: string;
-  role: 'user' | 'admin';
+  is_admin: boolean;
+  created_at: number;
+  updated_at: number;
 };
+
+export interface UserData {
+  user: User;
+}
+
+export interface AddUserData {
+  user: User;
+}
+
+export interface UsersData {
+  users: User[];
+  total: number;
+}
 
 export type UserFields = {
   username: string;

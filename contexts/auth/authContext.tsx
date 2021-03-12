@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<Props> = ({ children, currentUser }) => {
     dispatch({ type: SET_CURRENT_USER, payload: user });
 
     if (adminRedirect) {
-      if (user.role !== 'admin') {
+      if (!user.is_admin) {
         throw new Error('Bạn không có quyền truy cập trang này!');
       }
     }

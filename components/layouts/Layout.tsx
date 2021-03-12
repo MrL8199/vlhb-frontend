@@ -49,7 +49,7 @@ const AdminLayout: React.FC = ({ children }) => {
         <meta property="og:title" content="VLHB Shop | Admin" key="title" />
       </Head>
       <Layout style={{ minHeight: '100vh' }}>
-        {currentUser && currentUser.role === 'admin' && (
+        {currentUser && currentUser.is_admin && (
           <Sider
             collapsible
             collapsed={collapsed}
@@ -63,13 +63,7 @@ const AdminLayout: React.FC = ({ children }) => {
                 {!collapsed && <h1>VLHB Store</h1>}
               </a>
             </div>
-            <Menu
-              theme="dark"
-              mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              style={{ width: '100%' }}
-            >
+            <Menu theme="dark" mode="inline" style={{ width: '100%' }}>
               <SubMenu key="sub1" icon={<DashboardOutlined />} title="Bảng điều khiển">
                 <Menu.Item key="1">
                   <Link href="/dashboard">Thống kê</Link>
@@ -92,25 +86,20 @@ const AdminLayout: React.FC = ({ children }) => {
                   <Link href="/publisher">Quản lý nhà xuất bản</Link>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub3" icon={<UserOutlined />} title="Quản lý Tài khoản">
-                <Menu.Item key="7">
-                  <Link href="/manager">Quản lý tài khoản quản lý</Link>
-                </Menu.Item>
-                <Menu.Item key="8">
-                  <Link href="/user">Danh sách khách hàng</Link>
-                </Menu.Item>
-              </SubMenu>
-              <Menu.Item key="9" icon={<ShoppingCartOutlined />}>
+              <Menu.Item key="7" icon={<UserOutlined />}>
+                <Link href="/user">Quản lý Người dùng</Link>
+              </Menu.Item>
+              <Menu.Item key="8" icon={<ShoppingCartOutlined />}>
                 <Link href="/order">Quản lý Đơn hàng</Link>
               </Menu.Item>
-              <Menu.Item key="10" icon={<QrcodeOutlined />}>
+              <Menu.Item key="9" icon={<QrcodeOutlined />}>
                 <Link href="/coupon">Quản lý Khuyến mại</Link>
               </Menu.Item>
             </Menu>
           </Sider>
         )}
         <Layout className={styles.siteLayout}>
-          {currentUser && currentUser.role === 'admin' && <Header />}
+          {currentUser && currentUser.is_admin && <Header />}
           <Content style={{ margin: '0 16px' }}>{children}</Content>
           <Footer style={{ textAlign: 'center' }}>VLHB Store ©2021 bởi VLCODER</Footer>
         </Layout>

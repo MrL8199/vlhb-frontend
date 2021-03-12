@@ -43,7 +43,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
     try {
       const { user } = await AuthService.getMe(token);
       currentUser = user;
-      if (currentUser.role !== 'admin') throw Error('Không có quyền');
+      if (!currentUser.is_admin) throw Error('Không có quyền');
       if (ctx.pathname === '/login') redirectUser(ctx, '/');
     } catch (error) {
       destroyCookie(ctx, 'token');

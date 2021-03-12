@@ -25,10 +25,10 @@ const Header: React.FC = () => {
   const menu = (
     <Menu>
       <Menu.Item key="1" icon={<UserOutlined />}>
-        <Link href="/profile">Trang cá nhân</Link>
+        <Link href={`/user/${currentUser?.id}`}>Trang cá nhân</Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<SettingOutlined />}>
-        <Link href="/admin?selected_page=settings">Cài đặt</Link>
+        <Link href="/setting">Cài đặt</Link>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="3" onClick={onLogOut} icon={<LogoutOutlined />}>

@@ -18,10 +18,10 @@ const getAuthors = async (): Promise<AuthorsData> => {
   }
 };
 
-const addAuthor = async (category: AddAuthor): Promise<AddAuthorData> => {
+const addAuthor = async (author: AddAuthor): Promise<AddAuthorData> => {
   try {
     const url = '/authors';
-    const { data } = await apiClient.post(url, category);
+    const { data } = await apiClient.post(url, author);
     if (!data.status) throw new Error(data.message);
     return {
       author: data.data,
@@ -31,10 +31,10 @@ const addAuthor = async (category: AddAuthor): Promise<AddAuthorData> => {
   }
 };
 
-const updateAuthor = async (category: Author): Promise<AddAuthorData> => {
+const updateAuthor = async (author: Author): Promise<AddAuthorData> => {
   try {
-    const url = `/authors/${category.id}`;
-    const { data } = await apiClient.put(url, category);
+    const url = `/authors/${author.id}`;
+    const { data } = await apiClient.put(url, author);
     if (!data.status) throw new Error(data.message);
     return {
       author: data.data,
