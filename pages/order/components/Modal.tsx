@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Modal, ModalProps } from 'antd';
+import { Form, Input, Modal, ModalProps, Radio } from 'antd';
 import { Order } from 'types';
 
 const FormItem = Form.Item;
@@ -21,6 +21,12 @@ interface Props extends ModalProps {
 
 const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
   const formRef = React.createRef();
+
+  const radioStyle = {
+    display: 'block',
+    height: '30px',
+    lineHeight: '30px',
+  };
 
   const handleOk = () => {
     formRef.current
@@ -52,13 +58,29 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
           </FormItem>
         )}
         <FormItem
-          name="name"
+          name="status"
           rules={[{ required: true }]}
-          label={`Tên NXB`}
+          label={`Trạng thái`}
           hasFeedback
           {...formItemLayout}
         >
-          <Input />
+          <Radio.Group buttonStyle="solid">
+            <Radio.Button style={radioStyle} value={1}>
+              Đang xử lý
+            </Radio.Button>
+            <Radio.Button style={radioStyle} value={2}>
+              Đóng gói
+            </Radio.Button>
+            <Radio.Button style={radioStyle} value={3}>
+              Vận chuyển
+            </Radio.Button>
+            <Radio.Button style={radioStyle} value={4}>
+              Đã giao
+            </Radio.Button>
+            <Radio.Button style={radioStyle} value={0}>
+              Huỷ
+            </Radio.Button>
+          </Radio.Group>
         </FormItem>
       </Form>
     </Modal>

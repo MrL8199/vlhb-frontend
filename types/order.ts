@@ -53,3 +53,7 @@ export type Order = {
   total: number;
   user_id: string;
 };
+
+export type OrderData = {
+  order: Order;
+};

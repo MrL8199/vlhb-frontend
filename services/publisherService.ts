@@ -64,6 +64,7 @@ const fetchPublisher = async (id: string): Promise<Publisher> => {
     const publisherData: Publisher = {
       id: data.data.id,
       name: data.data.name,
+      created_at: data.data.created_at,
     };
 
     return publisherData;

@@ -128,10 +128,11 @@ const Orders: React.FC = () => {
       <Modal
         item={modalType === 'create' ? {} : currentItem}
         visible={modalVisible}
+        type={modalType}
         destroyOnClose={true}
         maskClosable={false}
         confirmLoading={loading}
-        title={modalType === 'create' ? 'Thêm nhà xuất bản' : 'Cập nhật nhà xuất bản'}
+        title={modalType === 'create' ? 'Tạo đơn hàng' : 'Cập nhật đơn hàng'}
         centered={true}
         onOk={async (data) => {
           try {

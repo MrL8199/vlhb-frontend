@@ -1,4 +1,4 @@
-import { Order, Orders, UpdateOrder } from 'types';
+import { Order, OrderData, Orders, UpdateOrder } from 'types';
 import { catchError } from 'utils/catchError';
 import apiClient from 'utils/apiClient';
 
@@ -59,29 +59,13 @@ const deleteOrder = async (id: string): Promise<void> => {
   }
 };
 
-const fetchOrder = async (id: string): Promise<Order> => {
+const fetchOrder = async (id: string): Promise<OrderData> => {
   try {
     const url = `/orders/${id}`;
     const { data } = await apiClient.get(url);
     if (!data.status) throw new Error(data.message);
 
-    const orderData: Order = {
-      address: data.data.address,
-      content: data.data.content,
-      created_at: data.data.created_at,
-      discount: data.data.discount,
-      grand_total: data.data.grand_total,
-      id: data.data.id,
-      item_discount: data.data.item_discount,
-      items: data.data.items,
-      promo: data.data.promo,
-      shipping: data.data.shipping,
-      status: data.data.status,
-      subtotal: data.data.subtotal,
-      tax: data.data.tax,
-      total: data.data.total,
-      user_id: data.data.user_id,
-    };
+    const orderData: OrderData = { order: data.data };
 
     return orderData;
   } catch (error) {
