@@ -1,5 +1,5 @@
-import React from 'react';
-import { Table, Modal, Avatar, TableProps, Tag, Tooltip } from 'antd';
+import React, { ReactInstance } from 'react';
+import { Table, Modal, TableProps, Tag, Tooltip } from 'antd';
 import { DropOption } from 'components/ui';
 import Link from 'next/link';
 import styles from './List.module.css';
@@ -21,7 +21,7 @@ interface Props extends TableProps<Order> {
 }
 
 const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
-  const handleMenuClick = (record: Order, e: { key: string; name: string }) => {
+  const handleMenuClick = (record: Order, e: { key: React.Key; item: ReactInstance }) => {
     if (e.key === '1') {
       onEditItem(record);
     } else if (e.key === '2') {
@@ -64,7 +64,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
-        const colors = {
+        const colors: any = {
           '4': ['success', <CheckCircleOutlined key="4" />, 'Nhận hàng'],
           '2': ['processing', <SyncOutlined spin key="2" />, 'Đóng gói'],
           '0': ['error', <CloseCircleOutlined key="0" />, 'Đã huỷ'],
@@ -136,7 +136,6 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       bordered
       scroll={{ x: 1200 }}
       columns={columns}
-      simple
       rowKey={(record) => record.id}
     />
   );

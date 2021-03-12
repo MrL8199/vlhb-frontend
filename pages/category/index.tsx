@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Popconfirm, message } from 'antd';
 import { Page } from 'components/ui';
-import { List } from './components';
-import { Filter } from './components';
-import { Modal } from './components';
+import { List } from 'components/category';
+import { Filter } from 'components/category';
+import { Modal } from 'components/category';
 import { Category } from 'types';
 import { CategoryService } from 'services/categoryService';
 import { useRouter } from 'next/router';
@@ -18,7 +18,7 @@ const Categories: React.FC<Props> = ({ categories }) => {
   const { query } = router;
 
   const [list, setList] = useState<Category[]>(categories);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setpagination] = useState({ current: 1, pageSize: 10, total: list.length });
   const [modalType, setmodalType] = useState<string>('create');
@@ -41,7 +41,7 @@ const Categories: React.FC<Props> = ({ categories }) => {
     try {
       setLoading(true);
       selectedRowKeys.forEach(async (key) => {
-        await CategoryService.deleteCategory(key);
+        await CategoryService.deleteCategory(key.toString());
       });
       const results = await CategoryService.getCategories();
       setList(results.categories);
@@ -60,7 +60,7 @@ const Categories: React.FC<Props> = ({ categories }) => {
   };
 
   return (
-    <Page inner loading={loading}>
+    <Page inner loading={loading} className={'main'}>
       <Filter
         filter={{
           ...query,
@@ -127,7 +127,7 @@ const Categories: React.FC<Props> = ({ categories }) => {
         }}
       />
       <Modal
-        item={modalType === 'create' ? {} : currentItem}
+        item={modalType === 'create' ? undefined : currentItem}
         type={modalType}
         visible={modalVisible}
         destroyOnClose={true}

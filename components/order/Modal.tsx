@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Modal, ModalProps, Radio } from 'antd';
+import { Form, FormInstance, Input, Modal, ModalProps, Radio } from 'antd';
 import { Order } from 'types';
 
 const FormItem = Form.Item;
@@ -15,12 +15,12 @@ const formItemLayout = {
 
 interface Props extends ModalProps {
   type: string;
-  item: Order;
+  item: Order | undefined;
   onOk: (...args: any[]) => any;
 }
 
 const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
-  const formRef = React.createRef();
+  const formRef = React.useRef<FormInstance>(null);
 
   const radioStyle = {
     display: 'block',
@@ -30,11 +30,10 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
 
   const handleOk = () => {
     formRef.current
-      .validateFields()
+      ?.validateFields()
       .then((values) => {
         const data = {
           ...values,
-          key: item.key,
         };
         onOk(data);
       })

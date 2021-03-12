@@ -1,12 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 import { FilterItem } from 'components/ui';
-import { Button, Row, Col, DatePicker, Form, Input, Cascader } from 'antd';
-import { Order } from 'types';
+import { Button, Row, Col, DatePicker, Form, Input, FormInstance } from 'antd';
 
 interface Props {
-  onAdd: (currentItem: Order) => void;
-  filter: object;
+  onAdd: React.MouseEventHandler<HTMLElement>;
+  filter: any;
   onFilterChange: (fields: any) => void;
 }
 
@@ -27,9 +26,9 @@ const TwoColProps = {
 };
 
 const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
-  const formRef = React.createRef();
+  const formRef = React.useRef<FormInstance>(null);
 
-  const handleFields = (fields) => {
+  const handleFields = (fields: any) => {
     const { createTime } = fields;
     if (createTime && createTime.length) {
       fields.createTime = [
@@ -41,13 +40,13 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
   };
 
   const handleSubmit = () => {
-    const values = formRef.current.getFieldsValue();
+    const values = formRef.current?.getFieldsValue();
     const fields = handleFields(values);
     onFilterChange(fields);
   };
 
   const handleReset = () => {
-    const fields = formRef.current.getFieldsValue();
+    const fields = formRef.current?.getFieldsValue();
     for (let item in fields) {
       if ({}.hasOwnProperty.call(fields, item)) {
         if (fields[item] instanceof Array) {
@@ -57,12 +56,11 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
         }
       }
     }
-    formRef.current.setFieldsValue(fields);
+    formRef.current?.setFieldsValue(fields);
     handleSubmit();
   };
-  const handleChange = (key, values) => {
-    const { onFilterChange } = this.props;
-    let fields = formRef.current.getFieldsValue();
+  const handleChange = (key: string | number, values: any) => {
+    let fields = formRef.current?.getFieldsValue();
     fields[key] = values;
     fields = handleFields(fields);
     onFilterChange(fields);
@@ -105,7 +103,7 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
             </FilterItem>
           </Col>
           <Col {...TwoColProps} xl={{ span: 10 }} md={{ span: 24 }} sm={{ span: 24 }}>
-            <Row type="flex" align="middle" justify="space-between">
+            <Row align="middle" justify="space-between">
               <div>
                 <Button
                   type="primary"

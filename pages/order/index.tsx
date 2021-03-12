@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Popconfirm, message } from 'antd';
 import { Page } from 'components/ui';
-import { List } from './components';
-import { Filter } from './components';
-import { Modal } from './components';
+import { List } from 'components/order';
+import { Filter } from 'components/order';
+import { Modal } from 'components/order';
 import { Order } from 'types';
 import { OrderService } from 'services/orderService';
 import { useRouter } from 'next/router';

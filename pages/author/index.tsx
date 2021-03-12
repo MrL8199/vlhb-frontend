@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Popconfirm, message } from 'antd';
 import { Page } from 'components/ui';
-import { List } from './components';
-import { Filter } from './components';
-import { Modal } from './components';
+import { List } from 'components/author';
+import { Filter } from 'components/author';
+import { Modal } from 'components/author';
 import { Author } from 'types';
 import { AuthorService } from 'services/authorService';
 import { useRouter } from 'next/router';
