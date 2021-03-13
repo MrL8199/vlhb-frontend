@@ -1,9 +1,10 @@
 import React, { ReactInstance } from 'react';
-import { Table, Modal, TableProps } from 'antd';
+import { Table, Modal, TableProps, Tooltip } from 'antd';
 import { DropOption } from 'components/ui';
 import styles from './List.module.css';
 import { Category } from 'types';
 import { ColumnsType } from 'antd/lib/table';
+import moment from 'moment';
 
 const { confirm } = Modal;
 
@@ -46,6 +47,13 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       title: 'Ngày tạo',
       dataIndex: 'created_at',
       key: 'created_at',
+      render: (time) => (
+        <>
+          <Tooltip title={moment(new Date(time * 1000)).format('HH:mm:ss DD/MM/YYYY')}>
+            {moment(new Date(time * 1000)).fromNow()}
+          </Tooltip>
+        </>
+      ),
       sorter: {
         compare: (a, b) => a.created_at - b.created_at,
         multiple: 3,
