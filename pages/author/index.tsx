@@ -53,9 +53,23 @@ const Authors: React.FC<Props> = ({ authors }) => {
     }
   };
 
+  const handleFilter = (query: any) => {
+    let newList: Author[] = list;
+    const name = query.name;
+    const createTime = query.createTime;
+    if (name) {
+      newList = newList.filter((item) => item.name.toLowerCase().includes(name.toLowerCase()));
+    }
+    if (createTime.length != 0) {
+      newList = newList.filter(
+        (item) => item.created_at >= createTime[0] && item.created_at <= createTime[1]
+      );
+    }
+    if (name === undefined && createTime.length == 0) fetchData();
+    setList(newList);
+  };
+
   const handleRefresh = (newQuery: any) => {
-    alert('change table: ' + newQuery);
-    console.log(newQuery);
     setpagination(newQuery);
   };
 
@@ -66,7 +80,7 @@ const Authors: React.FC<Props> = ({ authors }) => {
           ...query,
         }}
         onFilterChange={(value) => {
-          handleRefresh({
+          handleFilter({
             ...value,
           });
         }}

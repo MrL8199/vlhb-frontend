@@ -54,9 +54,23 @@ const Publishers: React.FC<Props> = ({ publishers }) => {
   };
 
   const handleRefresh = (newQuery: any) => {
-    alert('change table: ' + newQuery);
-    console.log(newQuery);
     setpagination(newQuery);
+  };
+
+  const handleFilter = (query: any) => {
+    let newList: Publisher[] = list;
+    const name = query.name;
+    const createTime = query.createTime;
+    if (name) {
+      newList = newList.filter((item) => item.name.includes(name));
+    }
+    if (createTime.length != 0) {
+      newList = newList.filter(
+        (item) => item.created_at >= createTime[0] && item.created_at <= createTime[1]
+      );
+    }
+    if (name === undefined && createTime.length == 0) fetchData();
+    setList(newList);
   };
 
   return (
@@ -66,7 +80,7 @@ const Publishers: React.FC<Props> = ({ publishers }) => {
           ...query,
         }}
         onFilterChange={(value) => {
-          handleRefresh({
+          handleFilter({
             ...value,
           });
         }}
