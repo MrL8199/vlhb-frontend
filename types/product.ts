@@ -28,15 +28,6 @@ export interface ProductsData {
 
 export interface ProductData {
   product: Product;
-  relatedProducts: Product[];
-}
-
-export interface AddProduct {
-  name: string;
-  image: string;
-  price: number;
-  description: string;
-  category: string;
 }
 
 export interface AddProductData {

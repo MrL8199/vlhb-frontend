@@ -1,13 +1,14 @@
-import { ProductData, ProductsData, AddProduct, AddProductData } from 'types';
+import { ProductData, ProductsData, Product } from 'types';
 import { catchError } from 'utils/catchError';
 import apiClient from 'utils/apiClient';
+import { ParsedUrlQuery } from 'querystring';
 
 type ProductPayload = { params: unknown };
 
-const fetchProducts = async (payload?: ProductPayload): Promise<ProductsData> => {
+const fetchProducts = async (params?: ParsedUrlQuery): Promise<ProductsData> => {
   try {
     const url = `/products`;
-    const { data } = await apiClient.get(url, payload);
+    const { data } = await apiClient.get(url, params);
 
     const productsData: ProductsData = {
       products: data.data.items,
@@ -23,11 +24,9 @@ export const fetchProduct = async (id: string): Promise<ProductData> => {
   try {
     const url = `/products/${id}`;
     const { data } = await apiClient.get(url);
-    const relatedProductsData = await apiClient.get(`/products?category=${data.data.category.id}`);
 
     const productData: ProductData = {
       product: data.data,
-      relatedProducts: relatedProductsData.data.items,
     };
     return productData;
   } catch (error) {
@@ -35,12 +34,24 @@ export const fetchProduct = async (id: string): Promise<ProductData> => {
   }
 };
 
-export const addProduct = async (product: AddProduct): Promise<AddProductData> => {
+export const addProduct = async (product: Product): Promise<ProductData> => {
   try {
     const url = '/products';
     const { data } = await apiClient.post(url, product);
     return {
-      product: data.data.product,
+      product: data.data,
+    };
+  } catch (error) {
+    throw new Error(catchError(error));
+  }
+};
+
+export const editProduct = async (product: Product): Promise<ProductData> => {
+  try {
+    const url = `/products/${product.id}`;
+    const { data } = await apiClient.post(url, product);
+    return {
+      product: data.data,
     };
   } catch (error) {
     throw new Error(catchError(error));
@@ -59,6 +70,7 @@ export const deleteProduct = async (id: string): Promise<void> => {
 export const ProductService = {
   fetchProducts,
   fetchProduct,
+  editProduct,
   addProduct,
   deleteProduct,
 };
