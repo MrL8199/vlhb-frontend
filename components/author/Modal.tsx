@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form, FormInstance, Input, message, Modal, ModalProps, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, FormInstance, Input, message, Modal, ModalProps, Progress, Upload } from 'antd';
 import { Author } from 'types';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/interface';
@@ -21,9 +21,15 @@ interface Props extends ModalProps {
   onOk: (...args: any[]) => any;
 }
 
-const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
+const UserModal: React.FC<Props> = ({ item, onOk, ...modalProps }) => {
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(item.picture);
+  const [imgURL, setImgURL] = useState<string>('');
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (item) setImgURL(item.picture);
+    else setImgURL('');
+  }, [item]);
 
   const beforeUpload = (file: File) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -55,7 +61,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
       .then((values) => {
         const data = {
           ...values,
-          key: item.id,
+          key: item?.id,
         };
         onOk(data);
       })
@@ -85,7 +91,11 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
 
     // Update progress (can be used to show progress indicator)
     xhr.upload.addEventListener('progress', function (e) {
-      onProgress({ percent: (e.loaded / e.total) * 100 });
+      const percent = Math.floor((e.loaded / e.total) * 100);
+      setProgress(percent);
+      if (percent === 100) {
+        setTimeout(() => setProgress(0), 1000);
+      }
     });
 
     xhr.onreadystatechange = function () {
@@ -101,14 +111,18 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         img.src = tokens.join('/');
         img.alt = response.public_id;
 
-        console.log(img.src);
-        setImageUrl(img.src);
-        console.log(imageUrl);
-        item.picture = img.src;
-        console.log(item.picture);
-
-        onSuccess(response.body, xhr);
+        formRef.current?.setFieldsValue({ picture: img.src });
+        if (item) item.picture = img.src;
+        setImgURL(img.src);
+        if (onSuccess) onSuccess(response.body, xhr);
       }
+    };
+
+    xhr.onerror = () => {
+      const error = new Error(
+        xhr.statusText + ' - ' + xhr.status + 'Failed to upload file to cloud storage'
+      );
+      if (onError) onError(error, {});
     };
 
     fd.append('upload_preset', unsignedUploadPreset);
@@ -149,23 +163,32 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         >
           <Input.TextArea size={'small'} />
         </FormItem>
-        <FormItem name="picture" label={`Hình ảnh`} hasFeedback {...formItemLayout}>
-          <Input value={imageUrl} />
-        </FormItem>
-        <Upload
-          listType="picture-card"
-          className="avatar-uploader"
-          showUploadList={false}
-          beforeUpload={beforeUpload}
-          onChange={handleChange}
-          customRequest={uploadFile}
+        <FormItem
+          style={{ display: 'none' }}
+          name="picture"
+          label={`Hình ảnh`}
+          hasFeedback
+          {...formItemLayout}
         >
-          {item.picture ? (
-            <img src={item.picture} alt="avatar" style={{ width: '100%' }} />
-          ) : (
-            uploadButton
-          )}
-        </Upload>
+          <Input />
+        </FormItem>
+        <FormItem label={`Hình ảnh`} {...formItemLayout}>
+          <Upload
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            beforeUpload={beforeUpload}
+            onChange={handleChange}
+            customRequest={uploadFile}
+          >
+            {imgURL !== '' ? (
+              <img src={imgURL} alt="avatar" style={{ width: '100%' }} />
+            ) : (
+              uploadButton
+            )}
+          </Upload>
+          {progress > 0 ? <Progress percent={progress} /> : null}
+        </FormItem>
       </Form>
     </Modal>
   );
