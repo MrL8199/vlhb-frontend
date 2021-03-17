@@ -80,9 +80,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       title: 'Thể loại',
       dataIndex: 'category',
       key: 'category',
-      render: (category, record) => (
-        <Link href={`category/${record.category.id}`}>{category.name}</Link>
-      ),
+      render: (category) => category.name,
     },
     {
       title: 'Ngày cập nhật',

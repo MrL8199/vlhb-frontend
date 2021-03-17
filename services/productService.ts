@@ -1,10 +1,7 @@
 import { ProductData, ProductsData, Product } from 'types';
 import { catchError } from 'utils/catchError';
 import apiClient from 'utils/apiClient';
-import { ParsedUrlQuery } from 'querystring';
 const qs = require('qs');
-
-type ProductPayload = { params: unknown };
 
 const fetchProducts = async (params?: any): Promise<ProductsData> => {
   try {
@@ -54,7 +51,7 @@ export const addProduct = async (product: Product): Promise<ProductData> => {
 export const editProduct = async (product: Product): Promise<ProductData> => {
   try {
     const url = `/products/${product.id}`;
-    const { data } = await apiClient.post(url, product);
+    const { data } = await apiClient.put(url, product);
     if (!data.status) throw new Error(data.message);
     return {
       product: data.data,
