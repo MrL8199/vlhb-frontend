@@ -17,6 +17,11 @@ export interface AuthorsData {
   total: number;
 }
 
+export interface AuthorsDataOption {
+  label: string;
+  value: string;
+}
+
 export interface AddAuthorData {
   author: Author;
 }

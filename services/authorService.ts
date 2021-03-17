@@ -1,4 +1,4 @@
-import { AddAuthor, AddAuthorData, Author, AuthorsData } from 'types';
+import { AddAuthor, AddAuthorData, Author, AuthorsData, AuthorsDataOption } from 'types';
 import { catchError } from 'utils/catchError';
 import apiClient from 'utils/apiClient';
 
@@ -13,6 +13,23 @@ const getAuthors = async (): Promise<AuthorsData> => {
     };
 
     return authorsData;
+  } catch (error) {
+    throw new Error(catchError(error));
+  }
+};
+
+const getAuthorsOption = async (): Promise<AuthorsDataOption[]> => {
+  try {
+    const { data } = await apiClient.get(`/authors`);
+    if (!data.status) throw new Error(data.message);
+
+    const authorsOption: AuthorsDataOption[] = [];
+
+    data.data.forEach((element: Author) => {
+      authorsOption.push({ label: element.name, value: element.id });
+    });
+
+    return authorsOption;
   } catch (error) {
     throw new Error(catchError(error));
   }
@@ -77,6 +94,7 @@ const fetchAuthor = async (id: string): Promise<Author> => {
 
 export const AuthorService = {
   getAuthors,
+  getAuthorsOption,
   updateAuthor,
   deleteAuthor,
   addAuthor,

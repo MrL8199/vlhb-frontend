@@ -1,4 +1,10 @@
-import { AddPublisher, PublishersData, Publisher, AddPublisherData } from 'types';
+import {
+  AddPublisher,
+  PublishersData,
+  Publisher,
+  AddPublisherData,
+  AuthorsDataOption,
+} from 'types';
 import { catchError } from 'utils/catchError';
 import apiClient from 'utils/apiClient';
 
@@ -13,6 +19,23 @@ const getPublishers = async (): Promise<PublishersData> => {
     };
 
     return publishersData;
+  } catch (error) {
+    throw new Error(catchError(error));
+  }
+};
+
+const getPublishersOption = async (): Promise<AuthorsDataOption[]> => {
+  try {
+    const { data } = await apiClient.get(`/publishers`);
+    if (!data.status) throw new Error(data.message);
+
+    const authorsOption: AuthorsDataOption[] = [];
+
+    data.data.forEach((element: Publisher) => {
+      authorsOption.push({ label: element.name, value: element.id });
+    });
+
+    return authorsOption;
   } catch (error) {
     throw new Error(catchError(error));
   }
@@ -75,6 +98,7 @@ const fetchPublisher = async (id: string): Promise<Publisher> => {
 
 export const PublisherService = {
   getPublishers,
+  getPublishersOption,
   updatePublisher,
   deletePublisher,
   addPublisher,

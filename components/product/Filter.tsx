@@ -31,10 +31,12 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
   const handleFields = (fields: any) => {
     const { createTime } = fields;
     if (createTime && createTime.length) {
-      fields.createTime = [
-        moment(createTime[0]).format('YYYY-MM-DD'),
-        moment(createTime[1]).format('YYYY-MM-DD'),
-      ];
+      fields.from_date = moment(createTime[0]).unix();
+      fields.to_date = moment(createTime[1]).unix();
+      delete fields.createTime;
+    } else {
+      fields.from_date = undefined;
+      fields.to_date = undefined;
     }
     return fields;
   };

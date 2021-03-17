@@ -1,4 +1,4 @@
-import { AddCategory, AddCategoryData, Category, CategoriesData } from 'types';
+import { AddCategory, AddCategoryData, Category, CategoriesData, AuthorsDataOption } from 'types';
 import { catchError } from 'utils/catchError';
 import apiClient from 'utils/apiClient';
 
@@ -13,6 +13,23 @@ const getCategories = async (): Promise<CategoriesData> => {
     };
 
     return categoriesData;
+  } catch (error) {
+    throw new Error(catchError(error));
+  }
+};
+
+const getCategoriesOption = async (): Promise<AuthorsDataOption[]> => {
+  try {
+    const { data } = await apiClient.get(`/category`);
+    if (!data.status) throw new Error(data.message);
+
+    const authorsOption: AuthorsDataOption[] = [];
+
+    data.data.forEach((element: Category) => {
+      authorsOption.push({ label: element.name, value: element.id });
+    });
+
+    return authorsOption;
   } catch (error) {
     throw new Error(catchError(error));
   }
@@ -75,6 +92,7 @@ const fetchCategory = async (id: string): Promise<Category> => {
 
 export const CategoryService = {
   getCategories,
+  getCategoriesOption,
   updateCategory,
   deleteCategory,
   addCategory,
