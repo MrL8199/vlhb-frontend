@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Popconfirm, message } from 'antd';
+import { Row, Col, Button, Popconfirm, message, PaginationProps } from 'antd';
 import { Page } from 'components/ui';
 import { List } from 'components/product';
 import { Filter } from 'components/product';
@@ -8,25 +8,24 @@ import { Product } from 'types';
 import { ProductService } from 'services/productService';
 import { useRouter } from 'next/router';
 import { stringify } from 'querystring';
-import { GetServerSideProps, NextPageContext } from 'next';
+import { NextPageContext } from 'next';
 
 interface Props {
   products: Product[];
   total: number;
 }
 
-const Orders: React.FC<Props> = ({ products, total }) => {
+const Products: React.FC<Props> = ({ products, total }) => {
   const router = useRouter();
   const { query } = router;
 
   const [list, setList] = useState<Product[]>(products);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [pagination, setpagination] = useState({
-    current: 1,
-    pageSize: 10,
+  const [pagination, setpagination] = useState<PaginationProps>({
+    current: query.page != undefined ? parseFloat(query.page.toString()) : undefined,
+    pageSize: query.pageSize != undefined ? parseFloat(query.pageSize.toString()) : undefined,
     total: total,
-    showSizeChanger: true,
   });
   const [modalType, setmodalType] = useState<string>('create');
   const [modalVisible, setmodalVisible] = useState<boolean>(false);
@@ -45,8 +44,23 @@ const Orders: React.FC<Props> = ({ products, total }) => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setList(products);
+        setpagination({
+          current: query.page != undefined ? parseFloat(query.page.toString()) : undefined,
+          pageSize: query.pageSize != undefined ? parseFloat(query.pageSize.toString()) : undefined,
+          total: total,
+        });
+      } catch (error) {
+        message.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
-  }, []);
+  }, [query]);
 
   const handleDeleteItems = async () => {
     try {
@@ -74,8 +88,6 @@ const Orders: React.FC<Props> = ({ products, total }) => {
         ...newQuery,
       }),
     });
-    alert('change table: ' + newQuery);
-    console.log(newQuery);
   };
 
   return (
@@ -152,13 +164,16 @@ const Orders: React.FC<Props> = ({ products, total }) => {
         destroyOnClose={true}
         maskClosable={false}
         confirmLoading={loading}
-        title={modalType === 'create' ? 'Tạo đơn hàng' : 'Cập nhật đơn hàng'}
+        title={modalType === 'create' ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm'}
         centered={true}
         onOk={async (data) => {
           try {
             setLoading(true);
-
-            await ProductService.editProduct(data);
+            if (modalType === 'create') {
+              await ProductService.addProduct(data);
+            } else {
+              await ProductService.editProduct(data);
+            }
 
             message.success('Thành công');
           } catch (e) {
@@ -177,9 +192,8 @@ const Orders: React.FC<Props> = ({ products, total }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context: NextPageContext) => {
+export const getServerSideProps = async (context: NextPageContext) => {
   const { query } = context;
-  console.log(query);
   const { products, total } = await ProductService.fetchProducts(query);
 
   return {
@@ -187,4 +201,4 @@ export const getServerSideProps: GetServerSideProps = async (context: NextPageCo
   };
 };
 
-export default Orders;
+export default Products;
