@@ -65,7 +65,7 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
     fields = handleFields(fields);
     onFilterChange(fields);
   };
-  const { name } = filter;
+  const { q } = filter;
 
   const initialCreateTime = [];
   if (filter.createTime && filter.createTime[0]) {
@@ -77,14 +77,10 @@ const Filter: React.FC<Props> = ({ onAdd, onFilterChange, filter }) => {
 
   return (
     <>
-      <Form
-        ref={formRef}
-        name="control-ref"
-        initialValues={{ name, createTime: initialCreateTime }}
-      >
+      <Form ref={formRef} name="control-ref" initialValues={{ q, createTime: initialCreateTime }}>
         <Row gutter={24}>
           <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
-            <Form.Item name="name">
+            <Form.Item name="q">
               <Search placeholder={`Tên tìm kiếm`} onSearch={handleSubmit} />
             </Form.Item>
           </Col>

@@ -124,6 +124,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       {...tableProps}
       pagination={{
         ...tableProps.pagination,
+        showSizeChanger: true,
         showTotal: (total, range) => `${range[0]}-${range[1]} trên tổng ${total} mục`,
       }}
       className={styles.table}
