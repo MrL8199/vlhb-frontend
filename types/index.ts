@@ -4,3 +4,4 @@ export * from './category';
 export * from './author';
 export * from './publisher';
 export * from './order';
+export * from './coupon';
