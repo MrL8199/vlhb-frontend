@@ -18,8 +18,13 @@ export type Product = {
   author: Author;
   publisher: Publisher;
   category: Category;
-  images: string[];
+  images: ImageProduct[];
 };
+
+interface ImageProduct {
+  id: string;
+  url: string;
+}
 
 export interface ProductsData {
   products: Product[];

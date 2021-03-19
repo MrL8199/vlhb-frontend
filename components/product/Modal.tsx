@@ -8,15 +8,15 @@ import {
   message,
   Modal,
   ModalProps,
-  Progress,
   Upload,
 } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/interface';
+import { PlusOutlined } from '@ant-design/icons';
 import { AuthorsDataOption, Product } from 'types';
 import { CategoryService } from 'services';
 import { PublisherService } from 'services/publisherService';
 import { AuthorService } from 'services/authorService';
+import { parseCookies } from 'nookies';
+import { API_URL } from 'utils/constants';
 
 const FormItem = Form.Item;
 
@@ -35,13 +35,30 @@ interface Props extends ModalProps {
   onOk: (...args: any[]) => any;
 }
 
+function getBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
+function getToken() {
+  const { token } = parseCookies({});
+  return token;
+}
+
 const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
   const [loading, setLoading] = useState(false);
-  const [imgURL, setImgURL] = useState<string>('');
-  const [progress, setProgress] = useState(0);
   const [categories, setCategories] = useState<AuthorsDataOption[]>([]);
   const [publishers, setPublishers] = useState<AuthorsDataOption[]>([]);
   const [authors, setAuthors] = useState<AuthorsDataOption[]>([]);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [fileList, setFileList] = useState<any>([]);
+  const [listID, setListID] = useState<any>([]);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
 
   const onChangeCategory = (value: string) => {
     formRef.current?.setFieldsValue({ category_id: value });
@@ -56,9 +73,6 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
   };
 
   useEffect(() => {
-    if (item) setImgURL(item.picture);
-    else setImgURL('');
-
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -89,16 +103,6 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
     return isJpgOrPng && isLt2M;
   };
 
-  const handleChange = (info: any) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      setLoading(false);
-    }
-  };
-
   const formRef = React.useRef<FormInstance>(null);
 
   const handleOk = () => {
@@ -107,7 +111,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
       .then((values) => {
         const data = {
           ...values,
-          key: item?.id,
+          images: listID,
         };
         onOk(data);
       })
@@ -116,66 +120,38 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
       });
   };
 
+  const handleCancel = () => setPreviewVisible(false);
+
+  const handlePreview = async (file: any) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+
+  const handleChange = (obj: any) => {
+    let { file } = obj;
+    if (file.status === 'done') {
+      setListID([file.response?.data.id, ...listID]);
+      file = { id: file.response.data.id, ...file };
+    }
+    if (file.status === 'removed') {
+      if (file.response?.data.id != null)
+        setListID(listID.filter((item: any) => item != file.response.data.id));
+    }
+    const { fileList } = obj;
+    setFileList(fileList);
+  };
+
   const uploadButton = (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Tải lên</div>
     </div>
   );
-
-  // *********** Upload file to Cloudinary ******************** //
-  const uploadFile = async (option: RcCustomRequestOptions) => {
-    const { onSuccess, onError, file } = option;
-
-    const cloudName = 'demo';
-    const unsignedUploadPreset = 'doc_codepen_example';
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
-    const xhr = new XMLHttpRequest();
-    const fd = new FormData();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-    // Update progress (can be used to show progress indicator)
-    xhr.upload.addEventListener('progress', function (e) {
-      const percent = Math.floor((e.loaded / e.total) * 100);
-      setProgress(percent);
-      if (percent === 100) {
-        setTimeout(() => setProgress(0), 1000);
-      }
-    });
-
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        // File uploaded successfully
-        const response = JSON.parse(xhr.responseText);
-        // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
-        const url = response.secure_url;
-        // Create a thumbnail of the uploaded image, with 150px width
-        const tokens = url.split('/');
-        tokens.splice(-2, 0, 'w_150,c_scale');
-        const img = new Image(); // HTML5 Constructor
-        img.src = tokens.join('/');
-        img.alt = response.public_id;
-
-        formRef.current?.setFieldsValue({ picture: img.src });
-        if (item) item.picture = img.src;
-        setImgURL(img.src);
-        if (onSuccess) onSuccess(response.body, xhr);
-      }
-    };
-
-    xhr.onerror = () => {
-      const error = new Error(
-        xhr.statusText + ' - ' + xhr.status + 'Failed to upload file to cloud storage'
-      );
-      if (onError) onError(error, {});
-    };
-
-    fd.append('upload_preset', unsignedUploadPreset);
-    fd.append('tags', 'browser_upload'); // Optional - add tag for image admin in Cloudinary
-    fd.append('file', file);
-    xhr.send(fd);
-  };
 
   return (
     <Modal {...modalProps} onOk={handleOk} cancelText={'Hủy'}>
@@ -188,6 +164,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
           category_id: item.category?.id,
           publisher_id: item.publisher?.id,
         }}
+        scrollToFirstError
         layout="horizontal"
       >
         {modalProps.type === 'update' && (
@@ -331,31 +308,29 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         >
           <Select options={categories} onChange={onChangeCategory} placeholder="Chọn thể loại" />
         </FormItem>
-        <FormItem
-          style={{ display: 'none' }}
-          name="picture"
-          label={`Hình ảnh`}
-          hasFeedback
-          {...formItemLayout}
-        >
-          <Input />
-        </FormItem>
         <FormItem label={`Hình ảnh`} {...formItemLayout}>
           <Upload
+            accept="image/*"
+            action={`${API_URL}/upload/`}
+            headers={{
+              Authorization: `Bearer ${getToken()}`,
+            }}
             listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            beforeUpload={beforeUpload}
+            fileList={fileList}
+            onPreview={handlePreview}
             onChange={handleChange}
-            customRequest={uploadFile}
+            beforeUpload={beforeUpload}
           >
-            {imgURL !== '' ? (
-              <img src={imgURL} alt="avatar" style={{ width: '100%' }} />
-            ) : (
-              uploadButton
-            )}
+            {fileList.length >= 8 ? null : uploadButton}
           </Upload>
-          {progress > 0 ? <Progress percent={progress} /> : null}
+          <Modal
+            visible={previewVisible}
+            title={previewTitle}
+            footer={null}
+            onCancel={handleCancel}
+          >
+            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+          </Modal>
         </FormItem>
       </Form>
     </Modal>

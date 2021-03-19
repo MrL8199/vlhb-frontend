@@ -6,7 +6,7 @@ const qs = require('qs');
 const fetchProducts = async (params?: any): Promise<ProductsData> => {
   try {
     params = qs.stringify(params, { encodeValuesOnly: true });
-    const url = `/products?${params}`;
+    const url = `/products/all?${params}`;
     const { data } = await apiClient.get(url);
     if (!data.status) throw new Error(data.message);
 

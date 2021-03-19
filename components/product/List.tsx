@@ -53,7 +53,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       title: 'Ảnh bìa',
       dataIndex: 'images',
       key: 'images',
-      render: (images) => <Image src={images[0]}></Image>,
+      render: (images) => <Image src={images[0]?.url}></Image>,
     },
     {
       title: 'Số lượng còn',
