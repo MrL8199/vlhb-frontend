@@ -1,0 +1,12 @@
+.table-column-status-switch-comp-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tips-switch {
+  pointer-events: none;
+  user-select: none;
+  display: inline-block;
+  margin-left: 2px;
+  margin-top: -1px;
+}
