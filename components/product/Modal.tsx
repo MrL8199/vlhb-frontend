@@ -167,7 +167,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         scrollToFirstError
         layout="horizontal"
       >
-        {modalProps.type === 'update' && (
+        {(modalProps.type === 'update' || modalProps.type === 'add') && (
           <FormItem
             name="id"
             rules={[{ required: true }]}
@@ -185,7 +185,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
           hasFeedback
           {...formItemLayout}
         >
-          <Input />
+          <Input disabled={modalProps.type === 'add'} />
         </FormItem>
         <FormItem
           name="price"
@@ -198,39 +198,12 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         </FormItem>
         <FormItem
           name="buy_price"
-          rules={[{ required: true }]}
+          rules={[{ required: modalProps.type != 'update' }]}
           label={`Giá nhập vào`}
           hasFeedback
           {...formItemLayout}
         >
-          <InputNumber min={1} />
-        </FormItem>
-        <FormItem
-          name="publish_year"
-          rules={[{ required: true }]}
-          label={`Năm xuất bản`}
-          hasFeedback
-          {...formItemLayout}
-        >
-          <InputNumber min={1} />
-        </FormItem>
-        <FormItem
-          name="quantity"
-          rules={[{ required: true }]}
-          label={`Số lượng nhập`}
-          hasFeedback
-          {...formItemLayout}
-        >
-          <InputNumber min={1} />
-        </FormItem>
-        <FormItem
-          name="quotes_about"
-          rules={[{ required: true }]}
-          label={`Trích dẫn`}
-          hasFeedback
-          {...formItemLayout}
-        >
-          <Input.TextArea size={'small'} />
+          <InputNumber min={1} disabled={modalProps.type === 'update'} />
         </FormItem>
         <FormItem
           name="discount"
@@ -239,7 +212,34 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
           hasFeedback
           {...formItemLayout}
         >
-          <InputNumber min={1} />
+          <InputNumber min={1} disabled={modalProps.type === 'add'} />
+        </FormItem>
+        <FormItem
+          name="quantity"
+          rules={[{ required: true }]}
+          label={`Số lượng nhập`}
+          hasFeedback
+          {...formItemLayout}
+        >
+          <InputNumber min={1} disabled={modalProps.type === 'update'} />
+        </FormItem>
+        <FormItem
+          name="publish_year"
+          rules={[{ required: true }]}
+          label={`Năm xuất bản`}
+          hasFeedback
+          {...formItemLayout}
+        >
+          <InputNumber min={1} disabled={modalProps.type === 'add'} />
+        </FormItem>
+        <FormItem
+          name="quotes_about"
+          rules={[{ required: true }]}
+          label={`Trích dẫn`}
+          hasFeedback
+          {...formItemLayout}
+        >
+          <Input.TextArea size={'small'} disabled={modalProps.type === 'add'} />
         </FormItem>
         <FormItem
           name="page_number"
@@ -248,7 +248,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
           hasFeedback
           {...formItemLayout}
         >
-          <InputNumber min={1} />
+          <InputNumber min={1} disabled={modalProps.type === 'add'} />
         </FormItem>
         <FormItem
           name={['author', 'id']}
@@ -257,7 +257,12 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
           hasFeedback
           {...formItemLayout}
         >
-          <Select options={authors} onChange={onChangeAuthor} placeholder="Chọn tác giả" />
+          <Select
+            options={authors}
+            onChange={onChangeAuthor}
+            placeholder="Chọn tác giả"
+            disabled={modalProps.type === 'add'}
+          />
         </FormItem>
         <FormItem
           name={['publisher', 'id']}
@@ -270,6 +275,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
             options={publishers}
             onChange={onChangePublisher}
             placeholder="Chọn nhà xuất bản"
+            disabled={modalProps.type === 'add'}
           />
         </FormItem>
         <FormItem
@@ -306,10 +312,16 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
           hasFeedback
           {...formItemLayout}
         >
-          <Select options={categories} onChange={onChangeCategory} placeholder="Chọn thể loại" />
+          <Select
+            options={categories}
+            onChange={onChangeCategory}
+            placeholder="Chọn thể loại"
+            disabled={modalProps.type === 'add'}
+          />
         </FormItem>
         <FormItem label={`Hình ảnh`} {...formItemLayout}>
           <Upload
+            disabled={modalProps.type === 'add'}
             accept="image/*"
             action={`${API_URL}/upload/`}
             headers={{

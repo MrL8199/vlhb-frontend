@@ -48,6 +48,19 @@ export const addProduct = async (product: Product): Promise<ProductData> => {
   }
 };
 
+export const additionalProduct = async (product: Product): Promise<ProductData> => {
+  try {
+    const url = `/products/${product.id}/add`;
+    const { data } = await apiClient.post(url, product);
+    if (!data.status) throw new Error(data.message);
+    return {
+      product: data.data,
+    };
+  } catch (error) {
+    throw new Error(catchError(error));
+  }
+};
+
 export const editProduct = async (product: Product): Promise<ProductData> => {
   try {
     const url = `/products/${product.id}`;
@@ -78,4 +91,5 @@ export const ProductService = {
   editProduct,
   addProduct,
   deleteProduct,
+  additionalProduct,
 };

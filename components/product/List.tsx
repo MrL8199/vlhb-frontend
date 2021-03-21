@@ -12,13 +12,16 @@ const { confirm } = Modal;
 interface Props extends TableProps<Product> {
   onDeleteItem(key: string): void;
   onEditItem(record: Product): void;
+  onAddItem(record: Product): void;
 }
 
-const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
+const List: React.FC<Props> = ({ onDeleteItem, onEditItem, onAddItem, ...tableProps }) => {
   const handleMenuClick = (record: Product, e: { key: React.Key; item: ReactInstance }) => {
     if (e.key === '1') {
       onEditItem(record);
     } else if (e.key === '2') {
+      onAddItem(record);
+    } else if (e.key === '3') {
       confirm({
         title: 'Bạn có chắc xóa bản ghi này?',
         cancelText: 'Hủy',
@@ -109,7 +112,8 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
             onMenuClick={(e) => handleMenuClick(record, e)}
             menuOptions={[
               { key: '1', name: 'Cập nhật' },
-              { key: '2', name: 'Xóa' },
+              { key: '2', name: 'Nhập thêm' },
+              { key: '3', name: 'Xóa' },
             ]}
           />
         );

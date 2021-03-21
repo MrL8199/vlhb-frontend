@@ -145,6 +145,11 @@ const Products: React.FC<Props> = ({ products, total }) => {
             fetchData();
           }
         }}
+        onAddItem={(item) => {
+          setmodalType('add');
+          setmodalVisible(true);
+          setCurrentItem(item);
+        }}
         onEditItem={(item) => {
           setmodalType('update');
           setmodalVisible(true);
@@ -171,8 +176,10 @@ const Products: React.FC<Props> = ({ products, total }) => {
             setLoading(true);
             if (modalType === 'create') {
               await ProductService.addProduct(data);
-            } else {
+            } else if (modalType === 'update') {
               await ProductService.editProduct(data);
+            } else if (modalType === 'add') {
+              await ProductService.additionalProduct(data);
             }
 
             message.success('Thành công');
