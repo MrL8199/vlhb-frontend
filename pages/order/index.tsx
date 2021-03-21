@@ -53,7 +53,7 @@ const Orders: React.FC = () => {
   };
 
   const handleRefresh = (newQuery: any) => {
-    alert('change table: ' + newQuery);
+    // alert('change table: ' + newQuery);
     console.log(newQuery);
     setpagination(newQuery);
   };

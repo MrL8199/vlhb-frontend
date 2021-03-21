@@ -1,5 +1,5 @@
 import React, { ReactInstance } from 'react';
-import { Table, Modal, TableProps, Tooltip, Progress, Image } from 'antd';
+import { Table, Modal, TableProps, Tooltip, Image } from 'antd';
 import { DropOption } from 'components/ui';
 import styles from './List.module.css';
 import { User } from 'types';
@@ -7,6 +7,7 @@ import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
 import Ellipsis from 'components/ui/Ellipsis';
 import { TableColumnStatusSwitch } from './TableColumnStatusSwitch/TableColumnStatusSwitch';
+import Link from 'next/link';
 
 const { confirm } = Modal;
 
@@ -36,9 +37,13 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       dataIndex: 'id',
       key: 'id',
       width: 88,
-      render: (text) => {
-        return '#' + text.substr(0, 4);
-      },
+      render: (text, record) => <Link href={`user/${record.id}`}>{'#' + text.substr(0, 4)}</Link>,
+    },
+    {
+      title: 'Tên tài khoản',
+      dataIndex: 'user_name',
+      key: 'user_name',
+      render: (text, record) => <Link href={`user/${record.id}`}>{text}</Link>,
     },
     {
       title: 'Tên',
@@ -50,9 +55,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       dataIndex: 'images',
       key: 'images',
       align: 'center',
-      render: (text, record) => (
-        <Image style={{width: '50px'}} src={record.avatar_url}></Image>
-      ),
+      render: (text, record) => <Image style={{ width: '50px' }} src={record.avatar_url}></Image>,
     },
     {
       title: 'email',
@@ -108,13 +111,11 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
     },
     {
       title: 'Quản trị?',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'is_admin',
+      key: 'is_admin',
       align: 'center',
-      render(status, record) {
-        return <>
-          <TableColumnStatusSwitch apiPath={'users'} id={record.id} value={record.is_admin === true ? 1 : 0} />
-        </>
+      render(is_admin, record) {
+        return <TableColumnStatusSwitch apiPath={'user'} id={record.id} value={is_admin} />;
       },
     },
     {
@@ -135,7 +136,7 @@ const List: React.FC<Props> = ({ onDeleteItem, onEditItem, ...tableProps }) => {
       },
     },
   ];
-  console.log('tableProps', tableProps)
+
   return (
     <Table
       {...tableProps}

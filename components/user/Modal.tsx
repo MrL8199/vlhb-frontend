@@ -1,6 +1,16 @@
-import React,{ useState } from 'react';
-import { DatePicker, Form, FormInstance, Input, InputNumber, Modal, ModalProps, message, Upload, Switch } from 'antd';
-import { PlusOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import React, { useState } from 'react';
+import {
+  Form,
+  FormInstance,
+  Input,
+  Modal,
+  ModalProps,
+  message,
+  Upload,
+  Switch,
+  InputNumber,
+} from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { User } from 'types';
 import moment from 'moment';
 
@@ -8,7 +18,6 @@ import { API_URL } from 'utils/constants';
 import { parseCookies } from 'nookies';
 
 const FormItem = Form.Item;
-const { RangePicker } = DatePicker;
 
 const formItemLayout = {
   labelCol: {
@@ -121,7 +130,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
     }
     return isJpgOrPng && isLt2M;
   };
-  
+
   const handleCancel = () => setPreviewVisible(false);
 
   return (
@@ -145,62 +154,58 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         )}
         <FormItem
           name="user_name"
-          rules={[{ required: true,
-            message: 'Hãy nhập tên đăng nhập!'}]}
+          rules={[{ required: true, message: 'Hãy nhập tên đăng nhập!' }]}
           label={`Tên đăng nhập`}
           hasFeedback
           {...formItemLayout}
         >
           <Input disabled={modalProps.type === 'update' ? true : false} />
         </FormItem>
-        {
-          modalProps.type === 'create' && (
-            <>
-              <FormItem
-                name="password"
-                label="Mật khẩu"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Hãy nhập mật khẩu!',
-                  },
-                ]}
-                hasFeedback
-                {...formItemLayout}
-              >
-                <Input.Password />
-              </FormItem>
+        {modalProps.type === 'create' && (
+          <>
+            <FormItem
+              name="password"
+              label="Mật khẩu"
+              rules={[
+                {
+                  required: true,
+                  message: 'Hãy nhập mật khẩu!',
+                },
+              ]}
+              hasFeedback
+              {...formItemLayout}
+            >
+              <Input.Password />
+            </FormItem>
 
-              <FormItem
-                name="confirm"
-                label="Xác nhận mật khẩu"
-                dependencies={['password']}
-                hasFeedback
-                {...formItemLayout}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Hãy nhập lại mật khẩu bạn vừa nhập!',
+            <FormItem
+              name="confirm"
+              label="Xác nhận mật khẩu"
+              dependencies={['password']}
+              hasFeedback
+              {...formItemLayout}
+              rules={[
+                {
+                  required: true,
+                  message: 'Hãy nhập lại mật khẩu bạn vừa nhập!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Mật khẩu không trùng khớp!'));
                   },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(new Error('Mật khẩu không trùng khớp!'));
-                    },
-                  }),
-                ]}
-              >
-                <Input.Password />
-              </FormItem>
-            </>
-          )
-        }
+                }),
+              ]}
+            >
+              <Input.Password />
+            </FormItem>
+          </>
+        )}
         <FormItem
           name="nickname"
-          rules={[{ required: true,
-            message: 'Hãy nhập tên của bạn!' }]}
+          rules={[{ required: true, message: 'Hãy nhập tên của bạn!' }]}
           label={`Tên`}
           hasFeedback
           {...formItemLayout}
@@ -233,8 +238,7 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         </FormItem>
         <FormItem
           name="email"
-          rules={[{ required: true,
-            message: 'Hãy nhập email!' }]}
+          rules={[{ required: true, message: 'Hãy nhập email!' }]}
           label={`Email`}
           hasFeedback
           {...formItemLayout}
@@ -243,29 +247,21 @@ const UserModal: React.FC<Props> = ({ item = {}, onOk, ...modalProps }) => {
         </FormItem>
         <FormItem
           name="phone"
-          rules={[{ required: true,
-            message: 'Hãy nhập số điện thoại!' }]}
+          rules={[{ required: true, message: 'Hãy nhập số điện thoại!' }]}
           label={`Số điện thoại`}
           hasFeedback
           {...formItemLayout}
         >
-          <Input />
+          <InputNumber maxLength={15} style={{ width: 200 }} />
         </FormItem>
         <FormItem
           name="is_admin"
-          rules={[{ required: true,
-            message: 'Hãy chọn chức vụ!' }]}
+          rules={[{ required: true, message: 'Hãy chọn chức vụ!' }]}
           label={`Quản trị`}
           hasFeedback
           {...formItemLayout}
         >
-          {
-            modalProps.type === 'update' ? (
-              <Switch defaultChecked={item.is_admin} />
-            ) : (
-              <Switch />
-            )
-          }
+          {modalProps.type === 'update' ? <Switch defaultChecked={item.is_admin} /> : <Switch />}
         </FormItem>
       </Form>
     </Modal>

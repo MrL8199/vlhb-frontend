@@ -29,8 +29,7 @@ const Users: React.FC<Props> = ({ users }) => {
     try {
       setLoading(true);
       const results = await UserService.getUsers();
-      // setList(results.users);
-      console.log('fetchData', results)
+      setList(results.users);
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -45,7 +44,7 @@ const Users: React.FC<Props> = ({ users }) => {
         await UserService.deleteUser(key.toString());
       });
       const results = await UserService.getUsers();
-      // setList(results.users);
+      setList(results.users);
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -140,7 +139,7 @@ const Users: React.FC<Props> = ({ users }) => {
             setSelectedRowKeys(selectedRowKeys);
           },
         }}
-      /> 
+      />
       <Modal
         item={modalType === 'create' ? undefined : currentItem}
         type={modalType}
@@ -152,23 +151,12 @@ const Users: React.FC<Props> = ({ users }) => {
         centered={true}
         onOk={async (data) => {
           try {
+            data.is_admin = data.is_admin === true ? 1 : 0;
             setLoading(true);
             if (modalType === 'create') {
-              await UserService.addUser({
-                full_name: data.nickname,
-                email: data.email,
-                phone: data.phone,
-                user_name: data.user_name,
-                password: data.password,
-                is_admin : data.is_admin,
-              });
+              await UserService.addUser(data);
             } else {
-              await UserService.updateUser({
-                first_name: data.nickname,
-                last_name: "",
-                email: data.email,
-                phone: data.phone,
-              });
+              await UserService.updateUser(data);
             }
             message.success('Thành công');
           } catch (e) {

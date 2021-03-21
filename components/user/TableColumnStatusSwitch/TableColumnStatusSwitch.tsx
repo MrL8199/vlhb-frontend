@@ -25,16 +25,16 @@ export const TableColumnStatusSwitch: React.FC<IProps> = (props: IProps) => {
 
     apiClient
       .patch(`${API_URL}/${props.apiPath}/${props.id}`, {
-        is_enable: Number(v),
+        is_admin: Number(v),
       })
       .then((res) => {
-        setStatus(Boolean(res.data.data?.is_enable));
+        setStatus(Boolean(res.data.data?.is_admin));
 
         message.success(
           <span>
             {`Cập nhật thành công: ${props.id}`}
             <Switch
-              checked={Boolean(res.data.data?.is_enable)}
+              checked={Boolean(res.data.data?.is_admin)}
               size="small"
               className={style['tips-switch']}
             />

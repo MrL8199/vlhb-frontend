@@ -20,7 +20,7 @@ const getUsers = async (): Promise<UsersData> => {
 
 const addUser = async (user: AddUserData): Promise<AddUserData> => {
   try {
-    const url = '/authors';
+    const url = '/user';
     const { data } = await apiClient.post(url, user);
     if (!data.status) throw new Error(data.message);
     return {
@@ -33,7 +33,7 @@ const addUser = async (user: AddUserData): Promise<AddUserData> => {
 
 const updateUser = async (user: User): Promise<AddUserData> => {
   try {
-    const url = `/authors/${user.id}`;
+    const url = `/user/${user.id}`;
     const { data } = await apiClient.put(url, user);
     if (!data.status) throw new Error(data.message);
     return {
@@ -45,7 +45,7 @@ const updateUser = async (user: User): Promise<AddUserData> => {
 };
 
 const deleteUser = async (id: string): Promise<void> => {
-  const url = `/authors/${id}`;
+  const url = `/user/${id}`;
   try {
     const { data } = await apiClient.delete(url);
     if (!data.status) throw new Error(data.message);
@@ -57,7 +57,7 @@ const deleteUser = async (id: string): Promise<void> => {
 
 const fetchUser = async (id: string): Promise<UserData> => {
   try {
-    const url = `/authors/${id}`;
+    const url = `/user/${id}`;
     const { data } = await apiClient.get(url);
     if (!data.status) throw new Error(data.message);
 
